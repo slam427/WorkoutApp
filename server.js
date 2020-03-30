@@ -17,13 +17,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 
-//local instanbce of MongoDB
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
-
-
-//connect directly to the HerokuDB - username and pw should be in process.env
-mongoose.connect(process.env.MONGODB_URI || "mongodb://dbuser:MYPASS@ds035593.mlab.com:35593/heroku_5t3dhqnx", { useNewUrlParser: true });
-
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
 
 // Enter Routes Here
@@ -40,39 +34,42 @@ app.get("/exercise", (req, res) => {
 });
 
 app.get("/api/workouts", (req, res) => {
-db.Workout.find({}, (err, data) => {
-    if(err)
-        throw err;
-    res.json(data);
-});
+    db.Workout.find({}, (err, data) => {
+        if (err)
+            throw err;
+        res.json(data);
+    });
 });
 
 app.post("/api/workouts", (req, res) => {
-db.Workout.create(req.body, (err, data) => {
-    if(err)
-        throw err;
-    res.json(data);
-});
+    const workout = {exercises: []};
+    console.log(workout);
+    db.Workout.create(workout, (err, data) => {
+        if (err)
+            throw err;
+        res.json(data);
+    });
 });
 
 
 app.put("/api/workouts/:id", (req, res) => {
-db.Workout.findByIdAndUpdate({_id: mongoose.Types.ObjectId(req.params.id)}, {$set: {exercises: req.body}}, (err, data) => {
-    if(err)
-        throw err;
-    res.json(data);
-});
+    console.log(req.params.id);
+    db.Workout.findByIdAndUpdate({ _id: mongoose.Types.ObjectId(req.params.id) }, { $set: { exercises: req.body } }, (err, data) => {
+        if (err)
+            throw err;
+        res.json(data);
+    });
 });
 
 app.get("/api/workouts/range", (req, res) => {
-db.Workout.find({}, (err, data) => {
-    if(err)
-        throw err;
-    res.json(data);
-});
+    db.Workout.find({}, (err, data) => {
+        if (err)
+            throw err;
+        res.json(data);
+    });
 });
 
 
 app.listen(PORT, () => {
-console.log(`App running on port ${PORT}!`);
+    console.log(`App running on port ${PORT}!`);
 });
