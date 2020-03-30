@@ -39,6 +39,7 @@ app.get("/exercise", (req, res) => {
     res.sendFile(path.join(__dirname, "public/exercise.html"));
 });
 
+
 app.get("/api/workouts", (req, res) => {
 db.Workout.find({}, (err, data) => {
     if(err)
@@ -51,25 +52,26 @@ app.post("/api/workouts", (req, res) => {
 db.Workout.create(req.body, (err, data) => {
     if(err)
         throw err;
-    res.json(data)
+    res.send(data);
 });
 });
+
 
 app.put("/api/workouts/:id", (req, res) => {
-db.Workout.update({_id: mongoose.Types.ObjectId(req.params.id)}, {$push: {exercises: req.body}} ), (err, data) => {
+db.Workout.findByIdAndUpdate({_id: mongoose.Types.ObjectId(req.params.id)}, {$set: {exercises: req.body}}, function (err, data) {
     if(err)
         throw err;
-    res.json(data);
-}
+    res.send(data);
+});
 });
 
-app.get("/api/workouts/range", (req, res) => {
-db.Workout.find({}, (err, data) => {
-    if(err)
-        throw err;
-    res.json(data);
-});
-});
+// app.get("/api/workouts/range", (req, res) => {
+// db.Workout.find({}, (err, data) => {
+//     if(err)
+//         throw err;
+//     res.json(data);
+// });
+// });
 
 
 app.listen(PORT, () => {
