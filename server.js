@@ -16,19 +16,60 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
+
+//local instanbce of MongoDB
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
+
+
+//connect directly to the HerokuDB - username and pw should be in process.env
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://<dbuser>:<dbpassword>@ds035593.mlab.com:35593/heroku_5t3dhqnx", { useNewUrlParser: true });
+
+
 
 // Enter Routes Here
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
-})
+    res.sendFile(path.join(__dirname, "public/index.html"));
+});
+
+app.get("/stats", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/stats.html"));
+});
 
 app.get("/exercise", (req, res) => {
     res.sendFile(path.join(__dirname, "public/exercise.html"));
 });
 
+app.get("/api/workouts", (req, res) => {
+db.Workout.find({}, (err, data) => {
+    if(err)
+        throw err;
+    res.json(data);
+});
+});
 
+app.post("/api/workouts", (req, res) => {
+db.Workout.create(req.body, (err, data) => {
+    if(err)
+        throw err;
+    res.json(data)
+});
+});
 
+app.put("/api/workouts/:id", (req, res) => {
+db.Workout.update({_id: mongoose.Types.ObjectId(req.params.id)}, {$push: {exercises: req.body}} ), (err, data) => {
+    if(err)
+        throw err;
+    res.json(data);
+}
+});
+
+app.get("/api/workouts/range", (req, res) => {
+db.Workout.find({}, (err, data) => {
+    if(err)
+        throw err;
+    res.json(data);
+});
+});
 
 
 app.listen(PORT, () => {

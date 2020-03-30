@@ -11,21 +11,34 @@ const WorkoutSchema = new Schema({
             type: {
                 type: String,
                 default: "cardio",
-                allowNull: false
+                allowNull: false,
+                required: true
             },
             name: {
                 type: String,
+                required: true
             },
             duration: {
                 type: Number,
+                required: true
             },
 
             distance: {
                 type: Number,
+                required: false
             },
-            weight: Number,
-            reps: Number,
-            sets: Number,
+            weight: {
+                type: Number,
+                required: false
+            },
+            reps: {
+                type: Number,
+                required: false
+            },
+            sets: {
+                type: Number,
+                required: false
+            }
         }
     ]
 });
