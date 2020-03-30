@@ -7,6 +7,3 @@ This web-based application allows a user to track daily workouts. The user has t
 
 ![Workout Tracker](/public/main.png "Link to app")
 
-
-
-![Philadelphia's Magic Gardens. This place was so cool!](/assets/images/philly-magic-gardens.jpg "Philadelphia's Magic Gardens")

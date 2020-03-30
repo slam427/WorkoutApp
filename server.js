@@ -65,13 +65,13 @@ db.Workout.findByIdAndUpdate({_id: mongoose.Types.ObjectId(req.params.id)}, {$se
 });
 });
 
-// app.get("/api/workouts/range", (req, res) => {
-// db.Workout.find({}, (err, data) => {
-//     if(err)
-//         throw err;
-//     res.json(data);
-// });
-// });
+app.get("/api/workouts/range", (req, res) => {
+db.Workout.find({}, (err, data) => {
+    if(err)
+        throw err;
+    res.json(data);
+});
+});
 
 
 app.listen(PORT, () => {
