@@ -18,11 +18,11 @@ app.use(express.static("public"));
 
 
 //local instanbce of MongoDB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
 
 //connect directly to the HerokuDB - username and pw should be in process.env
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://<dbuser>:<dbpassword>@ds035593.mlab.com:35593/heroku_5t3dhqnx", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://dbuser:MYPASS@ds035593.mlab.com:35593/heroku_5t3dhqnx", { useNewUrlParser: true });
 
 
 
@@ -39,7 +39,6 @@ app.get("/exercise", (req, res) => {
     res.sendFile(path.join(__dirname, "public/exercise.html"));
 });
 
-
 app.get("/api/workouts", (req, res) => {
 db.Workout.find({}, (err, data) => {
     if(err)
@@ -52,16 +51,16 @@ app.post("/api/workouts", (req, res) => {
 db.Workout.create(req.body, (err, data) => {
     if(err)
         throw err;
-    res.send(data);
+    res.json(data);
 });
 });
 
 
 app.put("/api/workouts/:id", (req, res) => {
-db.Workout.findByIdAndUpdate({_id: mongoose.Types.ObjectId(req.params.id)}, {$set: {exercises: req.body}}, function (err, data) {
+db.Workout.findByIdAndUpdate({_id: mongoose.Types.ObjectId(req.params.id)}, {$set: {exercises: req.body}}, (err, data) => {
     if(err)
         throw err;
-    res.send(data);
+    res.json(data);
 });
 });
 
